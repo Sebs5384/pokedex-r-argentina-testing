@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import { cargarPokemon, cargarPokemones } from './servicios/pokemon.js';
 import { actualizarTextoAyuda, mostrarTotalPokemones } from './ui/general.js';
 import { actualizarTextoIndicePokemones, mostrarListadoPokemones } from './ui/listado.js';
@@ -31,16 +32,9 @@ async function cambiarPagina(pagina) {
     mostrarPokemon(await cargarPokemon(nombre));
   });
 
-  mostrarPaginador(
-    listadoPokemones.total,
-    paginaActual,
-    listadoPokemones.siguienteUrl,
-    listadoPokemones.anteriorUrl,
-    cambiarPagina,
-  );
+  mostrarPaginador(listadoPokemones.total, paginaActual, listadoPokemones.siguienteUrl, listadoPokemones.anteriorUrl, cambiarPagina);
 }
 
 export default function inicializar() {
-  return cambiarPagina(1)
-    .catch((e) => console.error(e));
+  return cambiarPagina(1).catch((e) => console.error(e));
 }
