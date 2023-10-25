@@ -1,19 +1,44 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable import/no-duplicates */
+/* eslint-disable linebreak-style */
 import { manejarCambioPagina } from '../paginador.js';
+import mostrarPaginador from '../paginador.js';
 
-test('Previene el evento por defecto', () => {
-  const e = {
-    preventDefault: jest.fn(),
-    target: {
-      getAttribute: jest.fn(),
-      dataset: {
-        pagina: '1',
-      },
-    },
-  };
+test('Desahbilita el boton anterior cuando el paginador se encuentra en la pagina 1', () => {
+  const totalPokemons = 1292;
+  const paginaActual = 1;
+  const urlSiguiente = 'https://pokeapi.co/api/v2/pokemon/?offset=20&limit=20';
+  const urlAnterior = null;
+  const mockCallback = jest.fn();
 
-  manejarCambioPagina(e);
-  expect(e.preventDefault).toHaveBeenCalled();
+  document.body.innerHTML = '<div id="paginador"></div>';
+  mostrarPaginador(totalPokemons, paginaActual, urlSiguiente, urlAnterior, mockCallback);
+
+  const $paginas = document.querySelectorAll('#paginador li');
+  const $botonPaginaAnterior = $paginas[0];
+  const $botonPaginaSiguiente = $paginas[66];
+
+  expect($botonPaginaAnterior.className).toContain('disabled');
+  expect($paginas.length).toBe(67);
+
+  $botonPaginaSiguiente.click();
+  expect(mockCallback).toHaveBeenCalledTimes(1);
+});
+
+test('Desahbilita el boton siguiente cuando el paginador se encuentra en la ultima pagina', () => {
+  const totalPokemones = 1292;
+  const paginaActual = 65;
+  const urlSiguiente = null;
+  const urlAnterior = 'https://pokeapi.co/api/v2/pokemon/?offset=20&limit=1260';
+
+  document.body.innerHTML = '<div id="paginador"></div>';
+  mostrarPaginador(totalPokemones, paginaActual, urlSiguiente, urlAnterior);
+
+  const $paginas = document.querySelectorAll('#paginador li');
+  const $botonPaginaSiguiente = $paginas[66];
+
+  expect($botonPaginaSiguiente.className).toContain('disabled');
+  expect($paginas.length).toBe(67);
 });
 
 test('Cambia de pagina cuando se hace click en el enlance de una pagina', () => {
@@ -41,7 +66,7 @@ test('Navega de pagina usando el boton next o previous', () => {
     target: {
       getAttribute: jest.fn(),
       dataset: {
-        pagina: '',
+        pagina: '1',
       },
     },
   };

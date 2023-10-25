@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable max-len */
+/* eslint-disable linebreak-style */
 function crearItemPaginador(texto, url = '#') {
   const $item = document.createElement('li');
   const $link = document.createElement('a');
